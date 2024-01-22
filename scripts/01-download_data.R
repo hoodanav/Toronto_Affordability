@@ -1,26 +1,25 @@
 #### Preamble ####
-# Purpose: Downloads and saves the data from [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Downloads and saves the data from Open Data Toronto
+# Author: Navya Hooda
+# Date: 19 January, 2024
+# Contact: navya.hooda@mail.utoronto.ca 
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: None
+x# Ward profile from https://open.toronto.ca/dataset/ward-profiles-25-ward-model/
 
 
-#### Workspace setup ####
-library(opendatatoronto)
+#### Workspace setup #### 
+
 library(tidyverse)
-# [...UPDATE THIS...]
+source("scripts/helper_functions.R")
 
-#### Download data ####
-# [...ADD CODE HERE TO DOWNLOAD...]
-
+#### Download and write Toronto Ward Profile Data ####
 
 
-#### Save data ####
-# [...UPDATE THIS...]
-# change the_raw_data to whatever name you assigned when you downloaded it.
-write_csv(the_raw_data, "inputs/data/raw_data.csv") 
+# download ward profile data 
+raw_ward_data = download_data_from_opendatatoronto(
+  package_id = "6678e1a6-d25f-4dff-b2b7-aa8f042bc2eb",
+  resource_id = "16a31e1d-b4d9-4cf0-b5b3-2e3937cb4121"
+)
 
-         
+
