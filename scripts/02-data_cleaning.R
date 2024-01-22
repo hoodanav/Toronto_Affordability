@@ -1,44 +1,97 @@
 #### Preamble ####
-# Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose:  Clean ward info, and ward profile data and combine sets of info as needed
+# Author: Navya Hooda
+# Data: 19 January 2024
+# Contact: navya.hooda@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: 
+# 00-download_data.R
 
 #### Workspace setup ####
+
 library(tidyverse)
+library(janitor)
+library(readxl)
+library(dplyr)
 
-#### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+### Read excel data ###
+raw_ward_data <- read_excel("inputs/data/2023_Ward_Data.xlsx") 
 
-cleaned_data <-
-  raw_data |>
-  janitor::clean_names() |>
-  select(wing_width_mm, wing_length_mm, flying_time_sec_first_timer) |>
-  filter(wing_width_mm != "caw") |>
-  mutate(
-    flying_time_sec_first_timer = if_else(flying_time_sec_first_timer == "1,35",
-                                   "1.35",
-                                   flying_time_sec_first_timer)
-  ) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "490",
-                                 "49",
-                                 wing_width_mm)) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "6",
-                                 "60",
-                                 wing_width_mm)) |>
-  mutate(
-    wing_width_mm = as.numeric(wing_width_mm),
-    wing_length_mm = as.numeric(wing_length_mm),
-    flying_time_sec_first_timer = as.numeric(flying_time_sec_first_timer)
-  ) |>
-  rename(flying_time = flying_time_sec_first_timer,
-         width = wing_width_mm,
-         length = wing_length_mm
-         ) |> 
-  tidyr::drop_na()
+#### Data cleaning ####
 
-#### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+
+# Make the names easier to type
+cleaned_ward_data <-
+  clean_names(raw_ward_data)
+
+print(cleaned_ward_data)
+
+
+
+# Assigning numeric value to cols of cleaned_ward_data
+
+numeric_colnames <- 1:ncol(cleaned_ward_data)
+
+# Assign numeric names to columns
+colnames(cleaned_ward_data) <- numeric_colnames
+# Assign first col to 'variables' since it differs by row
+colnames(cleaned_ward_data)[1] <- "Variables"
+
+# Print the data with numeric column names
+head(cleaned_ward_data)
+print(cleaned_ward_data)
+
+
+## Select rows of interest to simplify data of interest
+
+# select row 18 about population per ward 
+# select row 1359 about total household income (2020)
+#select row 1005 about education level of bachelor's or higher
+
+selected_row_names <- c("18", "1359","1006")
+selected_rows <- cleaned_ward_data %>%
+  filter(row.names(.) %in% selected_row_names)
+
+print(selected_rows)
+
+# attach the selected row with the columns
+selected_data <- selected_rows %>%
+  select(Variables, all_of(numeric_colnames))
+
+print(selected_data) 
+
+
+# rename cols
+
+
+
+# transpose 
+
+
+library(tibble)
+
+# Assuming you have the selected_data tibble
+transposed_data <- t(selected_data) %>%
+  as_tibble()
+
+# Print or use the transposed_data as needed
+print(transposed_data)
+
+
+
+# join all rows into one table with the correct wards
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
