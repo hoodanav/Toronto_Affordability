@@ -1,52 +1,81 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "Is being 'successful' adequate to afford a decent standard lifestyle in Toronto? Assessing Toronto's Living Standards by Neighbourhood"
+
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
-date: today
+  - Navya Hooda
+
+thanks: "Code and data are available at: https://github.com/hoodanav/Toronto_Affordability"
+date: 22 January, 2024
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "Census 2021 results published in the dataset Ward Profile (25 Ward Model) were used in assessing living standards in Toronto. Based on Income, Education levels, Shelter costs it is shown that being socio-economically successful does not directly correlate to affording an easy life in Toronto. The paper assesses the living standards of top earners and qualified residents to show the decreasing affordability in Toronto."
 format: pdf
 number-sections: true
 bibliography: references.bib
 ---
 
 ```{r}
-#| include: false
-#| warning: false
 #| message: false
+#| echo: false
 
-library(tidyverse)
-library(palmerpenguins)
+#### Workspace set-up ####
+
+## Load packages
+library(tidyverse) # a collection of data-related packages
+library(knitr) # for kable
+library(kableExtra)
+library(here)
+
+#### Read cleaned data ####
+
+cleaned_ward_data = read_csv(
+  file = here("inputs/data/cleaned_ward_data.csv"),
+  show_col_types = FALSE
+)
+
+summarized_ward_data = read_csv(
+  file = here("inputs/data/summarized_ward_data.csv"),
+  show_col_types = FALSE
+)
 ```
 
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. 
+Over the past few years living expenses and affordability in Toronto has skyrocketed. Toronto is the single most expensive city in Canada (Jackson, 2023). The combination of record immigration, inflation, and a strong job market is keeping the demand for affordable housing high. As a result, the city is experiencing a high living cost. The rising costs in Toronto have lead to many residents being priced out of their own city. While Toronto usually experiences a high surge of new immigrants flowing in the city, there is a record high of residents leaving Toronto. In 2022 Toronto welcomed 138,000 new residents while 78,000 decided to leave. So much so that 1 in 4 Canadians leaving Canada, were Toronto residents (Punwasi, 2023). These realities raise the question whether the quality and standard of life in a major metropolitan city like Toronto is valuable.
 
-The remainder of this paper is structured as follows. @sec-data....
 
 
 
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+Data utilized in this analysis has been retrieved from Open Data Toronto using the opendatatoronto library (Gelfand 2022). The data source used is the Ward Profiles (25 Ward Model) from 2021 census data. The data has been cleaned and stored with capabilities of  the open source statistical language R (R Core Team 2022), Tidyverse (Wickham et al. 2019), ggplot2 (Wickham 2016), dplyr (Wickham et al. 2022), readr (Wickham, Hester, and Bryan 2022), tibble (Müller and Wickham 2022), janitor (Firke 2021), knitr (Xie 2014). The specific operations and analysis done using these sources has been discussed in the further subsections.  
+
 
 ```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
+#| label: income_by_ward
+#| fig-cap: Income by Ward
 #| echo: false
 
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
+library(ggplot2)
+library(dplyr)
+
+# Check if summarized_ward_data exists and has rows
+if (!exists("summarized_ward_data") || nrow(summarized_ward_data) == 0) {
+  warning("No valid data for plotting.")
+} else {
+  # Exclude the first row
+  summarized_ward_data <- summarized_ward_data[-1, ]
+
+  # Plot the income by ward 
+  ggplot(summarized_ward_data, aes(x = ward_name, y = `Total Income`)) +
+    geom_bar(stat = "identity", fill = "skyblue") +
+    labs(title = "Total Income by Ward",
+         x = "Ward Name",
+         y = "Total Income") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+
 ```
 
 Talk more about it.
@@ -73,34 +102,6 @@ analysis_data |>
 Talk way more about it. 
 
 
-
-# Model
-
-The goal of our modelling strategy is twofold. Firstly,...
-
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
-
-## Model set-up
-
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
-
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
-\end{align}
-
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
-
-
-### Model justification
-
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
 
 
 # Results

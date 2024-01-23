@@ -23,7 +23,7 @@ raw_ward_data = download_data_from_opendatatoronto(
   resource_id = "16a31e1d-b4d9-4cf0-b5b3-2e3937cb4121"
 )
 
-
+# write csv from data
 write_csv (
   x = raw_ward_data,
   file = "inputs/data/raw_ward_data.csv"
@@ -36,6 +36,8 @@ raw_ward_name_data = download_data_from_opendatatoronto(
   resource_id = "7672dac5-b383-4d7c-90ec-291dc69d37bf"
 )
 
+
+# write csv from data
 write_csv (
   x = raw_ward_name_data,
   file = "inputs/data/raw_ward_name_data.csv"
