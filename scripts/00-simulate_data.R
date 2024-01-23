@@ -1,19 +1,30 @@
 #### Preamble ####
-# Purpose: Simulates... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Simulates...
+# Author: Navya Hooda 
+# Date: 19 January 2024
+# Contact: navya.hooda@mail.utoronto.ca 
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: 
+# Any other information needed? 
 
 
 #### Workspace setup ####
 library(tidyverse)
-# [...UPDATE THIS...]
+install.packages("janitor")
 
 #### Simulate data ####
-# [...ADD CODE HERE...]
+simulated_data <-
+  tibble(
+    # Use 1 through to 25 to represent each division
+    "Division" = 1:25,
+    # Randomly pick an option, with replacement, 151 times
+    "Party" = sample(
+      x = c("Liberal", "Labor", "National", "Green", "Other"),
+      size = 25,
+      replace = TRUE
+    )
+  )
 
+simulated_data
 
 
