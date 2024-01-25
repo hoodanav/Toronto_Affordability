@@ -49,13 +49,14 @@ print(cleaned_ward_data)
 # select the rows of interest
 
 # row 18 is the total population
-# row 1359 is the household income 2020 
+# row 1383 is the avg household income 2020 
 # row 1392 is the no. of tenant households spending above 30% on rent
 # row 1396 is the no. of house owners spending above 30% on rent
-
+# row 1006 is the # of people with a bachelor's or higher education
+# row 133 si the average household size by persons
 # Numeric indices of columns to select
 columns_to_select <- 1:26  
-row_numbers_to_select <- c(18, 1359, 1396, 1392) 
+row_numbers_to_select <- c(1383, 1396, 1392, 1006) 
 
 # select the specified rows by slice
 cleaned_ward_data_subset <- cleaned_ward_data %>%
@@ -71,7 +72,7 @@ cleaned_ward_data_subset <- cleaned_ward_data %>%
 print(cleaned_ward_data_subset)
 
 # Rename rows
-new_row_names <- c("Population", "Total Income", "< 30% on Shelter", "< 30% on Rent")
+new_row_names <- c(" Avg Income", "< 30% on House", "< 30% on Rent",  "Bachelor's or higher")
 cleaned_ward_data_subset$Row_ID <- new_row_names
 
 
@@ -133,7 +134,7 @@ result_data <- result_data %>%
 # Fix rows to account for 'Toronto' total row at start 
 result_data <- result_data %>%
   mutate(
-    Ward = if_else(row_number() == 1, NA_real_, Ward + 1),
+    Ward = if_else(row_number() == 1, NA_real_, Ward),
     ward_name = if_else(row_number() == 1, "Toronto", ward_name)
   )
 
