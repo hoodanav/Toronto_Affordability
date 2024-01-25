@@ -46,9 +46,9 @@ summarized_ward_data = read_csv(
 
 # Introduction
 
-Over the past few years, living expenses and poor affordability in Toronto have skyrocketed. Toronto is the single most expensive city in Canada (Jackson 2023). The combination of record immigration, inflation, and a strong job market has been significantly impacting affordability.
+Over the past few years, living expenses and poor affordability in Toronto have skyrocketed. Toronto is the single most expensive city in Canada [@torontoExpensive]. The combination of record immigration, inflation, and a strong job market has been significantly impacting affordability.
 
-The city has a population of approximately 2.7 million people in total. While Toronto usually experiences a high surge of new immigrants flowing into the city, there is a record high of residents leaving Toronto. In 2022 Toronto welcomed 138,000 new residents while 78,000 decided to leave. So much so that 1 in 4 Canadians who left Canada, were Toronto residents (Punwasi 2023). These statistics highlight the shifting dynamics of affordability in Toronto and have led to many residents being priced out of their city.
+The city has a population of approximately 2.7 million people in total. While Toronto usually experiences a high surge of new immigrants flowing into the city, there is a record high of residents leaving Toronto. In 2022 Toronto welcomed 138,000 new residents while 78,000 decided to leave. So much so that 1 in 4 Canadians who left Canada, were Toronto residents[@Punwasi]. These statistics highlight the shifting dynamics of affordability in Toronto and have led to many residents being priced out of their city.
 
 The census data used in this paper records a variety of socioeconomic and cultural categories like ethnocultural, employment status, and income for each ward in the city. However, the most significant indicators of affordability are income and housing-related. In this paper, I used the income, shelter costs, and education levels as the estimand to gain a better understanding of affordability in Toronto. To identify relationships between socioeconomic factors affecting affordability, several data examinations and analyses were employed. The focus of this paper is to observe a correlation between education, income, and shelter costs through varying types of neighbourhoods in Toronto, those with both low and high income on average. This is to observe the nature of affordability for various types of households and groups so that a definitive assessment can be made of Toronto's affordability overall.
 
@@ -170,7 +170,7 @@ summarized_ward_data |>
 
 ## Average Household Income vs. % of people spending 30% or more income towards rent ##
 
- A common rule for safe budgeting expenses suggests that no more than 30% of income should be allocated towards housing expenses (Broverman 2020). As shown in @fig-compare_income_rent there is somewhat a positive correlation between Income and % of people paying over 30% on rent expenses.This implies that as income increases, the amount of people paying more than 30% towards rent increases. This shows us the trends in the housing sector, and shows signs of bad affordability since almost all income brackets have at least 40% of people over the advised budget spending on housing expenses (see @fig-rent_income_correlation)
+ A common rule for safe budgeting expenses suggests that no more than 30% of income should be allocated towards housing expenses[@rentBudget]. As shown in @fig-compare_income_rent there is somewhat a positive correlation between Income and % of people paying over 30% on rent expenses.This implies that as income increases, the amount of people paying more than 30% towards rent increases. This shows us the trends in the housing sector, and shows signs of bad affordability since almost all income brackets have at least 40% of people over the advised budget spending on housing expenses (see @fig-rent_income_correlation)
 
 ## Average Household Income vs. % of people spending 30% or more income towards rent ##
 
