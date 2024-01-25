@@ -170,7 +170,7 @@ summarized_ward_data |>
 
 ## Average Household Income vs. % of people spending 30% or more income towards rent ##
 
- A common rule for safe budgeting expenses suggests that no more than 30% of income should be allocated towards housing expenses[@rentBudget]. As shown in @fig-compare_income_rent there is somewhat a positive correlation between Income and % of people paying over 30% on rent expenses.This implies that as income increases, the amount of people paying more than 30% towards rent increases. Recall Ward 16, Don Valley East was one of the top income wards, yet about 40% of people in this bracket are also paying more than 30% income towards rent.
+ A common rule for safe budgeting expenses suggests that no more than 30% of income should be allocated towards housing expenses[@rentBudget]. As shown in @fig-compare_income_rent there is somewhat a positive correlation between Income and % of people paying over 30% on rent expenses.This implies that as income increases, the amount of people paying more than 30% towards rent increases.
  This shows us the trends in the housing sector, and shows signs of bad affordability since almost all income brackets have at least 40% of people over the advised budget spending on housing expenses (see @fig-rent_income_correlation) 
 
 ## Average Household Income vs. % of people spending 30% or more income towards owning homes ##
