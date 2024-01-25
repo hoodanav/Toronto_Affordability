@@ -2,7 +2,8 @@
 
 ## Overview
 
-This repo contains data about research done on Toronto's 25 Wards, and assessing their standard of living through various factors.
+This repo contains data about research done on Toronto's 25 Wards, and assessing their affordability through various factors.
+The data used in this project is Census 2021 data accessed from Open Data Toronto.
 To use this folder, click the green "Code" button", then "Download ZIP". 
 
 ## File Structure
