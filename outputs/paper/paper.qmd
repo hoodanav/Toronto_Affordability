@@ -1,5 +1,5 @@
 ---
-title: "Is being 'successful' adequate to afford a decent standard lifestyle in Toronto? Assessing Toronto's Living Standards by Neighbourhood"
+title: "Is being 'successful' adequate to afford a decent standard lifestyle in Toronto? Assessing Toronto's Living Standards by Neighbourhood" 
 
 author: 
   - Navya Hooda
@@ -7,11 +7,13 @@ author:
 thanks: "Code and data are available at: https://github.com/hoodanav/Toronto_Affordability"
 date: 22 January, 2024
 date-format: long
-abstract: "Census 2021 results published in the dataset Ward Profile (25 Ward Model) were used in assessing living standards in Toronto. Based on Income, Education levels, Shelter costs it is shown that being socio-economically successful does not directly correlate to affording an easy life in Toronto. The paper assesses the living standards of top earners and qualified residents to show the decreasing affordability in Toronto."
+abstract: "Census 2021 results published in the dataset Ward Profile (25 Ward Model) were used in assessing living standards in Toronto. Based on Income, Education levels, Shelter costs it is shown that being socio-economically successful does not directly correlate to affording an easy life in Toronto. The paper disects the living standards of top earners and qualified residents to assess affordability in Toronto."
 format: pdf
 number-sections: true
 bibliography: references.bib
 ---
+
+
 
 ```{r}
 #| message: false
@@ -20,10 +22,16 @@ bibliography: references.bib
 #### Workspace set-up ####
 
 ## Load packages
-library(tidyverse) # a collection of data-related packages
-library(knitr) # for kable
+
+library(tidyverse)
 library(kableExtra)
 library(here)
+library(knitr)
+library(ggplot2)
+library(ggbeeswarm)
+library(ggrepel)
+
+
 
 #### Read cleaned data ####
 
@@ -41,15 +49,74 @@ summarized_ward_data = read_csv(
 
 # Introduction
 
-Over the past few years living expenses and affordability in Toronto has skyrocketed. Toronto is the single most expensive city in Canada (Jackson, 2023). The combination of record immigration, inflation, and a strong job market is keeping the demand for affordable housing high. As a result, the city is experiencing a high living cost. The rising costs in Toronto have lead to many residents being priced out of their own city. While Toronto usually experiences a high surge of new immigrants flowing in the city, there is a record high of residents leaving Toronto. In 2022 Toronto welcomed 138,000 new residents while 78,000 decided to leave. So much so that 1 in 4 Canadians leaving Canada, were Toronto residents (Punwasi, 2023). These realities raise the question whether the quality and standard of life in a major metropolitan city like Toronto is valuable.
+Over the past few years, living expenses and poor affordability in Toronto have skyrocketed. Toronto is the single most expensive city in Canada (Jackson 2023). The combination of record immigration, inflation, and a strong job market has been significantly impacting affordability. 
+
+The city has a population of approximately 2.7 million people in total. While Toronto usually experiences a high surge of new immigrants flowing into the city, there is a record high of residents leaving Toronto. In 2022 Toronto welcomed 138,000 new residents while 78,000 decided to leave. So much so that 1 in 4 Canadians who left Canada, were Toronto residents (Punwasi 2023). These statistics highlight the shifting dynamics of affordability in Toronto and have led to many residents being priced out of their city. 
+
+
+The census data used in this paper records a variety of socioeconomic and cultural categories like ethnocultural, employment status, and income for each ward in the city. However, the most significant indicators of affordability are income and housing-related. In this paper, I used the income, shelter costs, and education levels as the estimand to gain a better understanding of affordability in Toronto. To identify relationships between socioeconomic factors affecting affordability, several data examinations and analyses were employed. The focus of this paper is to observe a correlation between education, income, and shelter costs through varying types of neighbourhoods in Toronto, those with both low and high income on average. This is to observe the nature of affordability for various types of households and groups so that a definitive assessment can be made of Toronto’s affordability overall. 
+
+
+In the Data Section, different data sources that were used are explained, and the data cleaning process that was applied to the datasets for analysis. The Results section discusses trends, observations, and correlations found. The Discussion section presents any additional data findings and overall insights into the analysis, additionally, any limitations of the analysis were mentioned. Lastly, the paper concludes with the Conclusion section which summarizes the main takeaways, and final insights from this paper.
+
 
 
 
 
 # Data {#sec-data}
 
-Data utilized in this analysis has been retrieved from Open Data Toronto using the opendatatoronto library (Gelfand 2022). The data source used is the Ward Profiles (25 Ward Model) from 2021 census data. The data has been cleaned and stored with capabilities of  the open source statistical language R (R Core Team 2022), Tidyverse (Wickham et al. 2019), ggplot2 (Wickham 2016), dplyr (Wickham et al. 2022), readr (Wickham, Hester, and Bryan 2022), tibble (Müller and Wickham 2022), janitor (Firke 2021), knitr (Xie 2014). The specific operations and analysis done using these sources has been discussed in the further subsections.  
+Data used in this paper is produced from the 2021 Census Data, and was provided by the City of Toronto through the library`opendatatoronto` [@rOpenDataToronto]. Two different data sources were used in conjunction to analyze affordability: ‘Ward Profiles (25-Ward Model)’ and `City Wards` [@torontoCityWards]. The data has been cleaned and stored with capabilities of the open source statistical language R [@r] (R Core Team 2022), `tidyverse` [@rTidyverse] (Wickham et al. 2019), `ggplot2` [@rGgplot2] (Wickham 2016), dplyr (Wickham et al. 2022), readr (Wickham, Hester, and Bryan 2022), tibble (Müller and Wickham 2022), janitor (Firke 2021), knitr (Xie 2014). The specific operations and analysis done using these sources has been discussed in the further subsections.  
 
+
+
+
+
+### Ward Profiles (25 Ward Model) 
+
+This data set records data on categories like Population, Dwelling, Ethnicities, and Income, for each of the 25 wards. As of January 22, 2024, the data set was last refreshed on January 3, 2024. The dataset includes past census results from 2016 and 2011, however, the first tab '2021 One Variable' data is the one that has been used for our purposes. For concise analysis, the data set was cleaned in several ways to produce a cleaner version. Only the variables of focus were extracted namely: population, average household income, % of people spending 30% or more on house payments, % of people spending 30% or more on rent and education levels. A sample of this cleaned data is shown in @tbl-cleaned-data. 
+
+```{r}
+#| message: false
+#| echo: false
+#| label: tbl-cleaned-data
+#| tbl-cap: Sample of Cleaned Ward Profile Data 
+
+# creates a table of the cleaned sample data set
+head(cleaned_ward_data, 5) |>
+  kable( col.names = c("Ward", "Population", "Avg Income", "< 30% on House", "< 30% on Rent", "Bachelor's or Higher"),
+      booktabs = TRUE
+  )
+```
+
+```{r}
+#| message: false
+#| echo: false
+#| label: tbl-summarized-data
+#| tbl-cap: Sample of Combined Ward Profile Data 
+
+# creates a table of the cleaned sample data set
+head(summarized_ward_data, 5) |>
+  kable(col.names = c("Ward", "Ward Name", "Population", "Avg Income", "< 30% on House", "< 30% on Rent", "Bachelor's+"),
+      booktabs = TRUE
+  )
+```
+
+
+### City Wards 
+
+The city wards data (Data 2024) is published on Open Data Toronto by the City Clerk’s Office and was last updated on January 1, 2024. This dataset consists of information like codes, boundaries, and names of the 25 city wards. The names of the wards are extracted from the data and matched with the ward codes from our previous census as it did not originally contain them.
+
+
+
+### Combining The Datasets 
+
+The ward name data originating from the ‘City Wards’ dataset was combined with the ‘Ward Profiles (25-Ward Model)’ using the ‘left_join’ and ‘select’ functions to create one summarized dataset containing ward name, ward name, ward code, population, total income, people spending 30% or more on shelter, and number of people possessing a bachelor’s or higher education level. Please refer to  @tbl-summarized-data for a snapshot of this summarized data. 
+
+
+
+# Results 
+
+## 
 
 ```{r}
 #| label: income_by_ward
@@ -67,7 +134,7 @@ if (!exists("summarized_ward_data") || nrow(summarized_ward_data) == 0) {
   summarized_ward_data <- summarized_ward_data[-1, ]
 
   # Plot the income by ward 
-  ggplot(summarized_ward_data, aes(x = ward_name, y = `Total Income`)) +
+  ggplot(summarized_ward_data, aes(x = ward_name, y = `Avg Income`)) +
     geom_bar(stat = "identity", fill = "skyblue") +
     labs(title = "Total Income by Ward",
          x = "Ward Name",
@@ -77,141 +144,6 @@ if (!exists("summarized_ward_data") || nrow(summarized_ward_data) == 0) {
 }
 
 ```
-
-Talk more about it.
-
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
-
-```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
-#| echo: false
-#| warning: false
-#| message: false
-
-analysis_data <- read_csv(here::here("outputs/data/analysis_data.csv"))
-
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
-```
-
-Talk way more about it. 
-
-
-
-
-# Results
-
-Our results are summarized in @tbl-modelresults.
-
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-library(rstanarm)
-
-first_model <-
-  readRDS(file = here::here("outputs/models/first_model.rds"))
-```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
-```
-
-
-
-
-# Discussion
-
-## First discussion point {#sec-first-point}
-
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
-
-## Second discussion point
-
-## Third discussion point
-
-## Weaknesses and next steps
-
-Weaknesses and next steps should also be included.
-
-\newpage
-
-\appendix
-
-# Appendix {-}
-
-
-# Additional data details
-
-# Model details {#sec-model-details}
-
-## Posterior predictive check
-
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
-
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
-
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
-
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
-```
-
-## Diagnostics
-
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
-
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
-
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
-
-plot(first_model, "trace")
-
-plot(first_model, "rhat")
-```
-
 
 
 \newpage
