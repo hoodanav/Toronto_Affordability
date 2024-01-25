@@ -1,5 +1,5 @@
 ---
-title: "Is being 'successful' adequate to afford a decent standard lifestyle in Toronto? Assessing Toronto's Living Standards by Neighbourhood" 
+title: "Assessing State of Affordability in Toronto" 
 
 author: 
   - Navya Hooda
@@ -7,13 +7,12 @@ author:
 thanks: "Code and data are available at: https://github.com/hoodanav/Toronto_Affordability"
 date: 22 January, 2024
 date-format: long
-abstract: "Census 2021 results published in the dataset Ward Profile (25 Ward Model) were used in assessing living standards in Toronto. Based on Income, Education levels, Shelter costs it is shown that being socio-economically successful does not directly correlate to affording an easy life in Toronto. The paper disects the living standards of top earners and qualified residents to assess affordability in Toronto."
+abstract: "Census 2021 results published in the dataset Ward Profile (25 Ward Model) were used in assessing affordability in Toronto. Based on income, education levels, shelter costs it is shown housing affordability is affecting people of all incomes in different ways. The paper draws a relationship between incomes and shelter costs to comment on affordability in Toronto."
 format: pdf
+toc: true
 number-sections: true
 bibliography: references.bib
 ---
-
-
 
 ```{r}
 #| message: false
@@ -28,8 +27,7 @@ library(kableExtra)
 library(here)
 library(knitr)
 library(ggplot2)
-library(ggbeeswarm)
-library(ggrepel)
+
 
 
 
@@ -46,35 +44,35 @@ summarized_ward_data = read_csv(
 )
 ```
 
-
 # Introduction
 
-Over the past few years, living expenses and poor affordability in Toronto have skyrocketed. Toronto is the single most expensive city in Canada (Jackson 2023). The combination of record immigration, inflation, and a strong job market has been significantly impacting affordability. 
+Over the past few years, living expenses and poor affordability in Toronto have skyrocketed. Toronto is the single most expensive city in Canada (Jackson 2023). The combination of record immigration, inflation, and a strong job market has been significantly impacting affordability.
 
-The city has a population of approximately 2.7 million people in total. While Toronto usually experiences a high surge of new immigrants flowing into the city, there is a record high of residents leaving Toronto. In 2022 Toronto welcomed 138,000 new residents while 78,000 decided to leave. So much so that 1 in 4 Canadians who left Canada, were Toronto residents (Punwasi 2023). These statistics highlight the shifting dynamics of affordability in Toronto and have led to many residents being priced out of their city. 
+The city has a population of approximately 2.7 million people in total. While Toronto usually experiences a high surge of new immigrants flowing into the city, there is a record high of residents leaving Toronto. In 2022 Toronto welcomed 138,000 new residents while 78,000 decided to leave. So much so that 1 in 4 Canadians who left Canada, were Toronto residents (Punwasi 2023). These statistics highlight the shifting dynamics of affordability in Toronto and have led to many residents being priced out of their city.
 
-
-The census data used in this paper records a variety of socioeconomic and cultural categories like ethnocultural, employment status, and income for each ward in the city. However, the most significant indicators of affordability are income and housing-related. In this paper, I used the income, shelter costs, and education levels as the estimand to gain a better understanding of affordability in Toronto. To identify relationships between socioeconomic factors affecting affordability, several data examinations and analyses were employed. The focus of this paper is to observe a correlation between education, income, and shelter costs through varying types of neighbourhoods in Toronto, those with both low and high income on average. This is to observe the nature of affordability for various types of households and groups so that a definitive assessment can be made of Toronto’s affordability overall. 
-
+The census data used in this paper records a variety of socioeconomic and cultural categories like ethnocultural, employment status, and income for each ward in the city. However, the most significant indicators of affordability are income and housing-related. In this paper, I used the income, shelter costs, and education levels as the estimand to gain a better understanding of affordability in Toronto. To identify relationships between socioeconomic factors affecting affordability, several data examinations and analyses were employed. The focus of this paper is to observe a correlation between education, income, and shelter costs through varying types of neighbourhoods in Toronto, those with both low and high income on average. This is to observe the nature of affordability for various types of households and groups so that a definitive assessment can be made of Toronto's affordability overall.
 
 In the Data Section, different data sources that were used are explained, and the data cleaning process that was applied to the datasets for analysis. The Results section discusses trends, observations, and correlations found. The Discussion section presents any additional data findings and overall insights into the analysis, additionally, any limitations of the analysis were mentioned. Lastly, the paper concludes with the Conclusion section which summarizes the main takeaways, and final insights from this paper.
 
-
-
-
-
 # Data {#sec-data}
 
-Data used in this paper is produced from the 2021 Census Data, and was provided by the City of Toronto through the library`opendatatoronto` [@rOpenDataToronto]. Two different data sources were used in conjunction to analyze affordability: ‘Ward Profiles (25-Ward Model)’ and `City Wards` [@torontoCityWards]. The data has been cleaned and stored with capabilities of the open source statistical language R [@r] (R Core Team 2022), `tidyverse` [@rTidyverse] (Wickham et al. 2019), `ggplot2` [@rGgplot2] (Wickham 2016), dplyr (Wickham et al. 2022), readr (Wickham, Hester, and Bryan 2022), tibble (Müller and Wickham 2022), janitor (Firke 2021), knitr (Xie 2014). The specific operations and analysis done using these sources has been discussed in the further subsections.  
+Data used in this paper is produced from the 2021 Census Data, and was provided by the City of Toronto through the library`opendatatoronto` [@rOpenDataToronto]. Two different data sources were used in conjunction to analyze affordability: `Ward Profiles (25-Ward Model)`[@torontoWardProfiles] and `City Wards` [@torontoCityWards]. The data has been cleaned and stored with capabilities of the open source statistical language R[@r], `tidyverse` [@rTidyverse], `ggplot2`[@rGgplot2], `dplyr` [@rDplyr], `readr`[@rReadr], `tibble`[@rTibble], `janitor` [@rJanitor], `knitr`[@rKnitr], `kable`[@rKableExtra], `here`[@here], and `tidyr`[@rTidyr].The specific operations and analysis done using these sources has been  discussed in further subsections. 
 
 
 
+### Ward Profiles (25 Ward Model) ###
+
+This data set records data on categories like Population, Dwelling, Ethnicities, and Income, for each of the 25 wards. As of January 22, 2024, the data set was last refreshed on January 3, 2024. The dataset includes past census results from 2016 and 2011, however, the first tab '2021 One Variable' data is the one that has been used for our purposes. For concise analysis, the data set was cleaned in several ways to produce a cleaner version. Only the variables of focus were extracted namely: population, average household income, % of people spending 30% or more on house payments, % of people spending 30% or more on rent and education levels. A sample of this cleaned data is shown in @tbl-cleaned-data.
 
 
-### Ward Profiles (25 Ward Model) 
 
-This data set records data on categories like Population, Dwelling, Ethnicities, and Income, for each of the 25 wards. As of January 22, 2024, the data set was last refreshed on January 3, 2024. The dataset includes past census results from 2016 and 2011, however, the first tab '2021 One Variable' data is the one that has been used for our purposes. For concise analysis, the data set was cleaned in several ways to produce a cleaner version. Only the variables of focus were extracted namely: population, average household income, % of people spending 30% or more on house payments, % of people spending 30% or more on rent and education levels. A sample of this cleaned data is shown in @tbl-cleaned-data. 
+### City Wards ###
 
+The city wards data (Data 2024) is published on Open Data Toronto by the City Clerk's Office and was last updated on January 1, 2024. This dataset consists of information like codes, boundaries, and names of the 25 city wards. The names of the wards are extracted from the data and matched with the ward codes from our previous census as it did not originally contain them.
+
+### Combining The Datasets ###
+
+The ward name data originating from the 'City Wards' dataset was combined with the 'Ward Profiles (25-Ward Model)' using the 'left_join' and 'select' functions to create one summarized dataset containing ward name, ward name, ward code, population, total income, people spending 30% or more on shelter, and number of people possessing a bachelor's or higher education level. Please refer to @tbl-summarized-data for a snapshot of this summarized data.
 ```{r}
 #| message: false
 #| echo: false
@@ -83,10 +81,14 @@ This data set records data on categories like Population, Dwelling, Ethnicities,
 
 # creates a table of the cleaned sample data set
 head(cleaned_ward_data, 5) |>
-  kable( col.names = c("Ward", "Population", "Avg Income", "< 30% on House", "< 30% on Rent", "Bachelor's or Higher"),
+  kable( col.names = c("Ward", "Avg Income", "< 30% on House", "< 30% on Rent", "Bachelor's or Higher"),
       booktabs = TRUE
   )
 ```
+
+
+\newpage 
+
 
 ```{r}
 #| message: false
@@ -95,31 +97,23 @@ head(cleaned_ward_data, 5) |>
 #| tbl-cap: Sample of Combined Ward Profile Data 
 
 # creates a table of the cleaned sample data set
-head(summarized_ward_data, 5) |>
-  kable(col.names = c("Ward", "Ward Name", "Population", "Avg Income", "< 30% on House", "< 30% on Rent", "Bachelor's+"),
-      booktabs = TRUE
+head(summarized_ward_data, 27) |>
+  kable(col.names = c("Ward", "Ward Name", "Avg Income", "< 30% on House", "< 30% on Rent", "Bachelor's+"),
+      booktabs = TRUE,
+      scale_down = TRUE,
+      font_size = 6,
+       align = "l"
   )
 ```
 
 
-### City Wards 
-
-The city wards data (Data 2024) is published on Open Data Toronto by the City Clerk’s Office and was last updated on January 1, 2024. This dataset consists of information like codes, boundaries, and names of the 25 city wards. The names of the wards are extracted from the data and matched with the ward codes from our previous census as it did not originally contain them.
 
 
+# Results
 
-### Combining The Datasets 
-
-The ward name data originating from the ‘City Wards’ dataset was combined with the ‘Ward Profiles (25-Ward Model)’ using the ‘left_join’ and ‘select’ functions to create one summarized dataset containing ward name, ward name, ward code, population, total income, people spending 30% or more on shelter, and number of people possessing a bachelor’s or higher education level. Please refer to  @tbl-summarized-data for a snapshot of this summarized data. 
-
-
-
-# Results 
-
-## 
 
 ```{r}
-#| label: income_by_ward
+#| label: fig-income_by_ward
 #| fig-cap: Income by Ward
 #| echo: false
 
@@ -136,9 +130,9 @@ if (!exists("summarized_ward_data") || nrow(summarized_ward_data) == 0) {
   # Plot the income by ward 
   ggplot(summarized_ward_data, aes(x = ward_name, y = `Avg Income`)) +
     geom_bar(stat = "identity", fill = "skyblue") +
-    labs(title = "Total Income by Ward",
+    labs(title = "Average Household Income by Ward",
          x = "Ward Name",
-         y = "Total Income") +
+         y = "Avg Household Income") +
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
@@ -146,9 +140,114 @@ if (!exists("summarized_ward_data") || nrow(summarized_ward_data) == 0) {
 ```
 
 
+
+## Ward Income Comparison ##
+
+Observing from @fig-income_by_ward, and referencing @tbl-summarized-data there are certain high-income wards and some low-income wards. The top three wards with high incomes are Davenport (Ward 9 ), Don Valley East (Ward 16), and Toronto-St Paul’s (Ward 12) with incomes $176,400, $224,800 and $174,800 respectively. Similarly, the 3 lowest-income wards are Eglinton Lawrence (Ward 8), York Centre(Ward 6), and Toronto-Danforth (Ward 14) with incomes $85,700, $88,700, and $89,400 respectively. 
+
+
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-compare_income_rent
+#| fig-cap: "Correlations between income and % of people paying over 30% towards rent"
+
+summarized_ward_data |>
+  ggplot(aes(x = `Avg Income`, y = `< 30% on Rent` , label = Ward)) + 
+  geom_point() + 
+  geom_smooth(method=lm, se=FALSE) + 
+  geom_text(hjust=-0.5, vjust=0.5) +
+  labs(
+    title = "Correlation between Income and people paying above 30% on Rent",
+    x = "Avg Income",
+    y = " % of People paying over 30% income towards rent",
+    label = "Ward Code"
+  ) +
+  theme_minimal()
+```
+
+## Average Household Income vs. % of people spending 30% or more income towards rent ##
+
+ A common rule for safe budgeting expenses suggests that no more than 30% of income should be allocated towards housing expenses (Broverman 2020). As shown in @fig-compare_income_rent there is somewhat a positive correlation between Income and % of people paying over 30% on rent expenses.This implies that as income increases, the amount of people paying more than 30% towards rent increases. This shows us the trends in the housing sector, and shows signs of bad affordability since almost all income brackets have at least 40% of people over the advised budget spending on housing expenses (see @fig-rent_income_correlation)
+
+## Average Household Income vs. % of people spending 30% or more income towards rent ##
+
+Similarly the housing expenses for home owners was observed in @fig-compare_income_house. 
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| label: fig-compare_income_house
+#| fig-cap: "Income and % of people paying over 30% of income towards owning"
+
+summarized_ward_data |>
+  ggplot(aes(x = `Avg Income`, y = `< 30% on House` , label = Ward)) + 
+  geom_point() + 
+  geom_smooth(method=lm, se=FALSE) + 
+  geom_text(hjust=-0.5, vjust=0.5) +
+  labs(
+    title = "Correlation between Income and people paying above 30% on owning homes",
+    x = "Avg Income",
+    y = " People paying over 30% income to own home (%)",
+    label = "Ward Code"
+  ) +
+  theme_minimal()
+``` 
+However, here a negative correlation is seen. This indicates that as the income increases the amount of people paying more than 30% towards home payments decreases, while it's at it's peak in the lower income categories.  
+
+
+
+
+# Discussion
+
+```{r}
+#| label: fig-rent_income_correlation 
+#| fig-cap: Correlation between income and the number of people paying over 30% of income on rent
+#| echo: false
+
+library(ggplot2)
+library(dplyr)
+
+# Check if summarized_ward_data exists and has rows
+if (!exists("summarized_ward_data") || nrow(summarized_ward_data) == 0) {
+  warning("No valid data for plotting.")
+} else {
+  # Exclude the first row
+  summarized_ward_data <- summarized_ward_data[-1, ]
+
+  # Plot the income by ward 
+  ggplot(summarized_ward_data, aes(x = ward_name, y = `< 30% on Rent` )) +
+    geom_bar(stat = "identity", fill = "skyblue") +
+    labs(title = "Income and % of people paying over 30% of income on Rent",
+         x = "Income",
+         y = "People paying over 30% income to rent (%)") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+```
+
+
+
+Overall both correlation analyses between income and housing expenses reveal a disconnect from affordability, offering an insight into the poor state of affordability in Toronto. There is a negative correlation between income and amount of people paying over 30% on home payments based on @fig-compare_income_house, this indicates that people in the lower income brackets are paying a large proportion of their income to afford their properties, while the high-income home owners have mostly a stable payment amount towards home owning. Toronto-Danforth (Ward 14) highlights this notion, on this graph it indicates that 35% of Toronto-Danforth residents are spending over 30% of their income on owning a home, yet recall that they are in the bottom 3 of lowest income wards in Toronto, a concerning relationship. Since one would require a higher income to afford property comfortably in Toronto, this finding contributes evidence of low affordability towards our analysis on Toronto's affordability. 
+
+Based on @fig-compare_income_rent we observe a clear positive correlation between income and the amount of people paying over 30% income towards rent. This indicates that as income increases, so does the amount of people paying over 30% of their income towards rent. Looking at @fig-rent_income_correlation almost each income bracket is consistently over the 30% threshold. Notice that Don Valley East (Ward 16) is on the higher side of this graph, yet was one of the top income wards as previously stated, despite the high income these residents are spending close to 45% of their income on rent. Observe Ward 19, Beaches-East York where about 50% of residents are spending more than 30% of their income on rent, that is unprecedented because half the residents can not comfortably afford rent. This trend signifies high rent prices across all of Toronto's 25 wards, providing another point of evidence revealing poor affordability in our analysis of Toronto's affordability.
+
+However, the limitations and biases of the data set we have explored must be noted. While the data clearly categorizes rent prices, ward incomes, and facts about each ward, the data does not report on all aspects of affordability. For example, it is not explicitly stated whether the incomes reported are from a single paycheck, or if a home-owner is also a landlord for another resident. These aspects can affect our perception of affordability since it is unknown how many properties a single person may own, and whether that contributes to the problem of low housing affordability due to availability. The data also does not report on whether Toronto has built new housing since the last census, and if that is being done a steady rate compared to the demand of housing in the city.
+
+
+# Conclusion 
+
+Finally, the assessment of affordability in Toronto has provided evidence regarding the relationship between income and housing expenses, as well as how they differ by type of housing expense, rent and home-owning. The dataset focuses on statistics from 2021 and does show significant correlation between income and shelter costs, and they indicates that affordability is on the decrease in the city as observed in most wards, and even varying income brackets. 
+
+Overall, this examination of affordability in Toronto reveals a growing affordability problem across all of Toronto, as well as the nature of Toronto's expenses and the need for high incomes. The results from our analysis are able to provide a realistic perspective behind the low affordability found in the city and calls for necessary change in housing market attitudes. 
+
+
+
+
 \newpage
 
 
+
 # References
-
-
