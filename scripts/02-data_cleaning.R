@@ -90,7 +90,7 @@ transposed_data <- cleaned_ward_data_subset %>%
 
 # make ward names numeric 
 transposed_data <- transposed_data %>%
-  mutate(Ward = row_number())
+  mutate(Ward = row_number()-1)
 
 
 # Print the transposed data
