@@ -34,12 +34,12 @@ library(ggplot2)
 #### Read cleaned data ####
 
 cleaned_ward_data = read_csv(
-  file = here("inputs/data/cleaned_ward_data.csv"),
+  file = here("outputs/data/cleaned_ward_data.csv"),
   show_col_types = FALSE
 )
 
 summarized_ward_data = read_csv(
-  file = here("inputs/data/summarized_ward_data.csv"),
+  file = here("outputs/data/summarized_ward_data.csv"),
   show_col_types = FALSE
 )
 ```

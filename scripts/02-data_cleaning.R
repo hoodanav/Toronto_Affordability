@@ -146,12 +146,12 @@ print(result_data)
 
 write_csv(
   x = transposed_data,
-  file = "inputs/data/cleaned_ward_data.csv"
+  file = "outputs/data/cleaned_ward_data.csv"
 )
 
 write_csv(
   x = result_data,
-  file = "inputs/data/summarized_ward_data.csv"
+  file = "outputs/data/summarized_ward_data.csv"
 )
 
 
