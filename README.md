@@ -2,13 +2,13 @@
 
 ## Overview
 
-This repo contains data about research done on Toronto's 25 Wards, and assessing their affordability through various factors.
-The data used in this project is Census 2021 data accessed from Open Data Toronto.
+This data analysis piece assesses Toronto's affordability through various economic factors in the current Canadian financial climate. 
+This repo contains data from research done on Toronto's 25 Wards, the data is sourced from Census 2021 data accessed from Open Data Toronto.
 To use this folder, click the green "Code" button", then "Download ZIP". 
 
 ## File Structure
 
-The repo is structured as:
+The repo is structured as follows:
 
 -   `input/data` contains the data sources used in analysis including the raw data.
 -   `outputs/data` contains the cleaned dataset that was constructed.
@@ -16,4 +16,3 @@ The repo is structured as:
 -   `scripts` contains the R scripts used to simulate, download, and clean data.
 
 
-**Statement on LLM usage: Aspects of the code were written with the help of the autocomplete tool, ChatGPT. The entire chat history is available in inputs/llms/usage.txt.**
