@@ -3,7 +3,7 @@
 ## Overview
 
 This data analysis piece assesses Toronto's affordability through various economic factors in the current Canadian financial climate. 
-This repo contains data from research done on Toronto's 25 Wards, the data is sourced from Census 2021 data accessed from Open Data Toronto.
+This repo contains data from research done on Toronto's 25 Wards, the data is sourced from Census 2021, accessed from Open Data Toronto.
 To use this folder, click the green "Code" button", then "Download ZIP". 
 
 ## File Structure
